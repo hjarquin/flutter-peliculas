@@ -21,14 +21,14 @@ class NowPlayingResponse {
     int totalPages;
     int totalResults;
 
-    factory NowPlayingResponse.fromRawJson(String str) => NowPlayingResponse.fromJson(json.decode(str));
+    factory NowPlayingResponse.fromJson(String str) => NowPlayingResponse.fromMap(json.decode(str));
 
     //String toRawJson() => json.encode(toJson());
 
-    factory NowPlayingResponse.fromJson(Map<String, dynamic> json) => NowPlayingResponse(
-        dates: Dates.fromJson(json["dates"]),
+    factory NowPlayingResponse.fromMap(Map<String, dynamic> json) => NowPlayingResponse(
+        dates: Dates.fromMap(json["dates"]),
         page: json["page"],
-        results: List<Movie>.from(json["results"].map((x) => Movie.fromJson(x))),
+        results: List<Movie>.from(json["results"].map((x) => Movie.fromMap(x))),
         totalPages: json["total_pages"],
         totalResults: json["total_results"],
     );
@@ -45,9 +45,9 @@ class Dates {
     DateTime maximum;
     DateTime minimum;
 
-    factory Dates.fromRawJson(String str) => Dates.fromJson(json.decode(str));
+    factory Dates.fromJson(String str) => Dates.fromMap(json.decode(str));
 
-    factory Dates.fromJson(Map<String, dynamic> json) => Dates(
+    factory Dates.fromMap(Map<String, dynamic> json) => Dates(
         maximum: DateTime.parse(json["maximum"]),
         minimum: DateTime.parse(json["minimum"]),
     );

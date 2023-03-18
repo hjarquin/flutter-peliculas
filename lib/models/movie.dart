@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter_peliculasapp/models/now_playing_response.dart';
-
 class Movie {
     Movie({
         required this.adult,
@@ -12,8 +10,8 @@ class Movie {
         required this.originalTitle,
         required this.overview,
         required this.popularity,
-        required this.posterPath,
-        required this.releaseDate,
+        this.posterPath,
+        this.releaseDate,
         required this.title,
         required this.video,
         required this.voteAverage,
@@ -21,25 +19,23 @@ class Movie {
     });
 
     bool adult;
-    String? backdropPath;
+    String backdropPath;
     List<int> genreIds;
     int id;
     String originalLanguage;
     String originalTitle;
     String overview;
     double popularity;
-    String posterPath;
-    String releaseDate;
+    String? posterPath;
+    String? releaseDate;
     String title;
     bool video;
     double voteAverage;
     int voteCount;
 
-    factory Movie.fromRawJson(String str) => Movie.fromJson(json.decode(str));
+    factory Movie.fromJson(String str) => Movie.fromMap(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
-
-    factory Movie.fromJson(Map<String, dynamic> json) => Movie(
+    factory Movie.fromMap(Map<String, dynamic> json) => Movie(
         adult: json["adult"],
         backdropPath: json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
@@ -56,20 +52,5 @@ class Movie {
         voteCount: json["vote_count"],
     );
 
-    Map<String, dynamic> toJson() => {
-        "adult": adult,
-        "backdrop_path": backdropPath,
-        "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
-        "id": id,
-        "original_language": originalLanguage,
-        "original_title": originalTitle,
-        "overview": overview,
-        "popularity": popularity,
-        "poster_path": posterPath,
-        "release_date": releaseDate,
-        "title": title,
-        "video": video,
-        "vote_average": voteAverage,
-        "vote_count": voteCount,
-    };
+    
 }
