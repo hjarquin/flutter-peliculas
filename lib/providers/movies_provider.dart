@@ -3,13 +3,13 @@ import 'package:flutter_peliculasapp/models/models.dart';
 import 'package:http/http.dart' as http;
 
 class MoviesProvider extends ChangeNotifier {
+  String _apikey = '3c674ead23447880bce6284cbf6588ce';
+  String _baseUrl = "api.themoviedb.org";
+  String _language = "es-ES";
 
-  String _apikey='3c674ead23447880bce6284cbf6588ce';
-  String _baseUrl="api.themoviedb.org";
-  String _language="es-ES";
-
-  List<Movie> onDisplayMovies=[];
-  List<Movie> popularMovies=[];
+  List<Movie> onDisplayMovies = [];
+  List<Movie> popularMovies = [];
+  int _popularPages =0;
 
   MoviesProvider() {
     print("MoviesProvider Inicializando");
@@ -17,36 +17,30 @@ class MoviesProvider extends ChangeNotifier {
     this.getPopularMovies();
   }
 
-  getOnDisplayMovies() async {
-    print("Metodo getOnDisplayMovies");
-    var url =
-        Uri.https(_baseUrl, '3/movie/now_playing', {
-            'api_key': _apikey,
-            'language': _language,
-            'page': '1'
-        });
+  Future<String> _getJsonData(String endpoint, [int page=1]) async {
+   var url = Uri.https(_baseUrl, endpoint,
+        {'api_key': _apikey, 'language': _language, 'page': '$page'});
 
     // Await the http get response, then decode the json-formatted response.
     final response = await http.get(url);
-    final nowPlayingResponse= NowPlayingResponse.fromJson(response.body) ;
+    return response.body;
+  }
+
+  getOnDisplayMovies() async {
+    print("Metodo getOnDisplayMovies");
+    final jsonData= await this._getJsonData('3/movie/now_playing');
+    final nowPlayingResponse = NowPlayingResponse.fromJson(jsonData);
     //if(response.statusCode!=200) return print("error");
-    //print(nowPlayingResponse.results[0].title);
-    onDisplayMovies=nowPlayingResponse.results;
+    onDisplayMovies = nowPlayingResponse.results;
     notifyListeners();
   }
 
   getPopularMovies() async {
+    _popularPages++;
     print("Metodo getPopularMovies");
-    var url =
-        Uri.https(_baseUrl, '3/movie/popular', {
-            'api_key': _apikey,
-            'language': _language,
-            'page': '1'
-        });
-
-    final response = await http.get(url);
-    final popularResponse= PopularResponse.fromJson(response.body) ;
-    popularMovies=[...popularMovies,... popularResponse.results];
+    final jsonData= await this._getJsonData('3/movie/popular',_popularPages);
+    final popularResponse = PopularResponse.fromJson(jsonData);
+    popularMovies = [...popularMovies, ...popularResponse.results];
     //print(popularResponse.results[0].title);
     notifyListeners();
   }
