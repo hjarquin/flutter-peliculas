@@ -61,9 +61,6 @@ class _CustomAppBar extends StatelessWidget {
 }
 
 class _PosterAndTitle extends StatelessWidget {
-  const _PosterAndTitle({super.key});
-  
-  
   
   @override
   Widget build(BuildContext context) {
