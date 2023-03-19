@@ -88,7 +88,7 @@ class _MoviePoster extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => Navigator.popAndPushNamed(context, 'details', 
+            onTap: () => Navigator.pushNamed(context, 'details', 
                                                     arguments: movie),
             
             child: ClipRRect(
